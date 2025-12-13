@@ -9,7 +9,8 @@ import crypto from "crypto";
 
 export const placeOrderCOD = async (req, res) => {
   try {
-    const { userId, items, address } = req.body;
+    const {  items, address } = req.body;
+     const userId = req.userId || req.body?.userId;
     if (!address || items.length === 0) {
       return res.json({ success: false, message: "Invalid Data" });
     }
@@ -41,8 +42,8 @@ export const placeOrderCOD = async (req, res) => {
 
 export const placeOrderRazorpay = async (req, res) => {
   try {
-    const { userId, items, address } = req.body;
-
+    const {  items, address } = req.body;
+ const userId = req.userId || req.body?.userId;
     if (!address || items.length === 0) {
       return res.json({ success: false, message: "Invalid Data" });
     }
@@ -90,8 +91,8 @@ export const placeOrderRazorpay = async (req, res) => {
 // Verify Razorpay payment signature: /api/order/razorpay/verify
 export const verifyRazorpayPayment = async (req, res) => {
   try {
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, orderId, userId } = req.body;
-
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, orderId } = req.body;
+ const userId = req.userId || req.body?.userId;
     const generated_signature = crypto
       .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
       .update(`${razorpay_order_id}|${razorpay_payment_id}`)
