@@ -8,8 +8,8 @@ import User from "../models/User.js"
 export const updateCart =async (req,res)=>{
 try {
 
-    const{cartItems}=req.body
-    const userId = req.userId || req.body?.userId;
+    const{userId,cartItems}=req.body
+    // const userId = req.userId || req.body?.userId;
     await User.findByIdAndUpdate(userId,{cartItems})
     res.json({ success: true, message: "Cart Updated" });
 } catch (error) {
