@@ -26,7 +26,7 @@ await connectCloudinary()
 
 //Allowed origins for CORS
 const allowOrigins = [
-  "http://localhost:5173"
+  "https://online-grocery-frontend-chi.vercel.app"
   
 ];
 
