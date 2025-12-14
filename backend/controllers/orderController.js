@@ -141,8 +141,7 @@ export const getUserOrders = async (req, res) => {
 
 export const getAllOrders = async (req, res) => {
   try {
-    const { userId } = req.body;
-     //const userId = req.userId || req.body?.userId;
+  
     const orders = await Order.find({
       $or: [
         {
