@@ -82,14 +82,13 @@ const Cart = () => {
         //Place order with razorpay
 
         const { data } = await axios.post("/api/order/razorpay", {
-          const userId1 = req.userId || req.body?.userId;
-          userId: userId1,
-          items: cartArray.map((item) => ({
-            product: item._id,
-            quantity: item.quantity,
-          })),
-          address: selectedAddress._id,
-        });
+  userId: user._id,   // ✅ frontend se
+  items: cartArray.map((item) => ({
+    product: item._id,
+    quantity: item.quantity,
+  })),
+  address: selectedAddress._id,
+});
 
        if (data.success) {
           const { orderId, razorpayOrder } = data.data;
