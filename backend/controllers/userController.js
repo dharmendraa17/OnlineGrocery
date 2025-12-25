@@ -2,6 +2,33 @@ import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
+
+// Update User Profile Image: /api/user/update-image
+export const updateImage = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const imageFile = req.file;
+
+    if (!imageFile) {
+      return res.status(400).json({ success: false, message: "No image provided" });
+    }
+
+    // Upload to Cloudinary
+    const imageUpload = await cloudinary.uploader.upload(imageFile.path, {
+      resource_type: "image",
+    });
+    const imageUrl = imageUpload.secure_url;
+
+    // Save URL to MongoDB
+    await User.findByIdAndUpdate(userId, { image: imageUrl });
+
+    res.json({ success: true, message: "Profile image updated", imageUrl });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+
 //Register User Model : /api/user/register
 export const register = async (req, res) => {
   try {

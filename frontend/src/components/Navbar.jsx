@@ -71,6 +71,7 @@ function Navbar() {
             {getCartCount()}
           </button>
         </div>
+        
 
         {!user ? (
           <button
@@ -155,6 +156,16 @@ function Navbar() {
           <NavLink to="/" onClick={() => setOpen(false)} className="block">
             Contact
           </NavLink>
+          // Use user.image from useAppContext if available
+{user ? (
+  <img 
+    src={user.image || assets.profile_icon} 
+    className="w-8 h-8 rounded-full cursor-pointer" 
+    onClick={() => navigate('/profile')} 
+  />
+) : (
+  <button onClick={() => setShowUserLogin(true)}>Login</button>
+)}
 
           {!user ? (
             <button
