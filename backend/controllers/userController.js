@@ -1,30 +1,44 @@
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-
+import { v2 as cloudinary } from 'cloudinary';
 
 // Update User Profile Image: /api/user/update-image
 export const updateImage = async (req, res) => {
   try {
-    const userId = req.userId;
-    const imageFile = req.file;
+    const userId = req.userId; // Provided by authUser middleware
+    const imageFile = req.file; // Provided by multer middleware
 
     if (!imageFile) {
       return res.status(400).json({ success: false, message: "No image provided" });
     }
 
-    // Upload to Cloudinary
+    // Upload image to Cloudinary
     const imageUpload = await cloudinary.uploader.upload(imageFile.path, {
       resource_type: "image",
     });
+    
     const imageUrl = imageUpload.secure_url;
 
-    // Save URL to MongoDB
-    await User.findByIdAndUpdate(userId, { image: imageUrl });
+    // Update user record in MongoDB
+    const updatedUser = await User.findByIdAndUpdate(
+      userId, 
+      { image: imageUrl }, 
+      { new: true }
+    ).select("-password");
 
-    res.json({ success: true, message: "Profile image updated", imageUrl });
+    if (!updatedUser) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    res.json({ 
+      success: true, 
+      message: "Profile image updated successfully", 
+      user: updatedUser 
+    });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    console.error("Update image error:", error.message || error);
+    res.status(500).json({ success: false, message: error.message || "Update failed" });
   }
 };
 

@@ -1,7 +1,7 @@
 import express from 'express';
-import { isAuth, login, logout, register } from '../controllers/userController.js';
+import { isAuth, login, logout, register,updateImage } from '../controllers/userController.js';
 import authUser from '../middlewares/authUser.js';
-import { upload } from '../configs/multer.js'; //
+import { upload } from '../configs/multer.js';
 const userRouter =express.Router();
 
 userRouter.post('/register',register)
