@@ -20,7 +20,9 @@ const Profile = () => {
       const { data } = await axios.post('/api/user/update-image', formData);
       if (data.success) {
         toast.success(data.message);
-        fetchUser(); // Refresh user data in context to update the UI globally
+        if (typeof fetchUser === 'function') {
+          await fetchUser(); 
+        } // Refresh user data in context to update the UI globally
         setImage(null);
       } else {
         toast.error(data.message);
